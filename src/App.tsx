@@ -34,7 +34,14 @@ function App() {
       <Route element={ <Layout /> }>
         <Route path="/" element={ <Home updateCart={ updateCart } /> } />
         <Route path="/carrinho" element={ <Carrinho cartList={ cartList } /> } />
-        <Route path="/detalhesProduto/:id" element={ <CardDetails /> } />
+        <Route
+          path="/detalhesProduto/:id"
+          element={
+            <CardDetails
+              updateCart={ updateCart }
+            />
+}
+        />
         <Route path="/" />
       </Route>
       {/* <Route path="*" element={ <NotFound /> } /> */}

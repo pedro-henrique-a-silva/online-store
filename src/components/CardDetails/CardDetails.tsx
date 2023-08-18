@@ -1,12 +1,17 @@
 // AlbumDetails.tsx
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { CardType } from '../../types';
 import { getProductById } from '../../services/api';
 
-function CardDetails() {
+type CardDetailsProps = {
+  updateCart: (prodName: CardType) => void
+};
+
+function CardDetails(props: CardDetailsProps) {
+  const { updateCart } = props;
   const { id } = useParams<{ id: string }>();
-  const [card, setCard] = useState<CardType | null>(null);
+  const [card, setCard] = useState<CardType>();
 
   useEffect(() => {
     const fetchCardDetails = async () => {
@@ -23,9 +28,9 @@ function CardDetails() {
     fetchCardDetails();
   }, [id]);
 
-  //   if (!card) {
-  //     return <div>Produto não encontrado</div>;
-  //   }
+  if (!card) {
+    return <div>Produto não encontrado</div>;
+  }
 
   return (
     <ul data-testid="product">
@@ -39,9 +44,13 @@ function CardDetails() {
       </li>
       <li data-testid="product-detail-name">{card?.title}</li>
       <li data-testid="product-detail-price">{card?.price}</li>
-      <Link to="/carrinho">
-        <button>Adicionar ao carrinho</button>
-      </Link>
+      <button
+        data-testid="product-detail-add-to-cart"
+        onClick={ () => updateCart(card) }
+      >
+        Adicionar ao carrinho
+
+      </button>
     </ul>
   );
 }
