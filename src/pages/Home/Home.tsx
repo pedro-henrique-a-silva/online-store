@@ -2,13 +2,21 @@ import React, { useState } from 'react';
 import { getProductsFromCategoryAndQuery } from '../../services/api';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import Card from '../../components/Card/Card';
+import { CardType } from '../../types';
 
-function Home() {
+type HomeProps = {
+  updateCart: (prodName: CardType) => void
+};
+
+function Home(props: HomeProps) {
+  const { updateCart } = props;
   const [inputValue, setInputValue] = useState('');
-  const [listProduct, setListProduct] = useState([]);
+  const [listProduct, setListProduct] = useState<CardType[]>([]);
 
   const filterByCategory = async (categoryID: string) => {
     const list = await getProductsFromCategoryAndQuery(categoryID, '');
+    console.log(list.results);
+
     setListProduct(list.results);
   };
 
@@ -39,13 +47,14 @@ function Home() {
         </form>
       </div>
       <div>
-        {listProduct.length > 0 ? (listProduct.map(({ id, title, prince, thumbnail }) => (
+        {listProduct.length > 0 ? (listProduct.map(({ id, title, price, thumbnail }) => (
           <li key={ id }>
             <Card
               id={ id }
               title={ title }
               thumbnail={ thumbnail }
-              price={ prince }
+              price={ price }
+              updateCart={ updateCart }
             />
           </li>
         ))) : <p>Nenhum produto foi encontrado</p>}

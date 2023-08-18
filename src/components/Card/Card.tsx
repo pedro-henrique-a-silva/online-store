@@ -1,13 +1,11 @@
 import { Link } from 'react-router-dom';
+import { CardType } from '../../types';
 
-type InfoProp = {
-  title: string,
-  thumbnail: string,
-  price: number,
-  id : string,
-};
+type CardProps = {
+  updateCart: (prodName: CardType) => void
+} & CardType;
 
-function Card({ title, thumbnail, price, id }: InfoProp) {
+function Card({ title, thumbnail, price, id, updateCart }: CardProps) {
   return (
     <ul data-testid="product">
       <li>
@@ -24,9 +22,17 @@ function Card({ title, thumbnail, price, id }: InfoProp) {
         { title }
       </li>
       <li>
+        R$
+        {' '}
         { price }
       </li>
-      <button>Adicionar ao carrinho</button>
+      <button
+        data-testid="product-add-to-cart"
+        onClick={ () => updateCart({ id, title, thumbnail, price }) }
+      >
+        Adicionar ao carrinho
+
+      </button>
     </ul>
   );
 }
