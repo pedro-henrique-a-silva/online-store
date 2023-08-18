@@ -42,6 +42,7 @@ function Home() {
         {listProduct.length > 0 ? (listProduct.map(({ id, title, prince, thumbnail }) => (
           <li key={ id }>
             <Card
+              id={ id }
               title={ title }
               thumbnail={ thumbnail }
               price={ prince }

@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home/Home';
 import Carrinho from './pages/Carrinho/Carrinho';
 import Layout from './components/Layout/Layout';
+import CardDetails from './components/CardDetails/CardDetails';
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
       <Route element={ <Layout /> }>
         <Route path="/" element={ <Home /> } />
         <Route path="/carrinho" element={ <Carrinho /> } />
-        <Route path="/" />
+        <Route path="/detalhesProduto/:id" element={ <CardDetails /> } />
         <Route path="/" />
       </Route>
       {/* <Route path="*" element={ <NotFound /> } /> */}
