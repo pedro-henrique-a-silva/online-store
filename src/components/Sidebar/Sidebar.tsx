@@ -3,7 +3,11 @@ import { getCategories } from '../../services/api';
 
 import { CategoryResponse } from '../../types';
 
-function Sidebar() {
+type SidebarProp = {
+  filterByCategory: (categoryID: string) => void,
+};
+
+function Sidebar({ filterByCategory }: SidebarProp) {
   const [categoryList, setCategoryList] = useState<CategoryResponse[]>([]);
 
   useEffect(() => {
@@ -20,7 +24,12 @@ function Sidebar() {
         {categoryList.map((category) => {
           return (
             <li key={ category.id }>
-              <button data-testid="category">{category.name}</button>
+              <button
+                data-testid="category"
+                onClick={ () => filterByCategory(category.id) }
+              >
+                {category.name}
+              </button>
             </li>
           );
         })}

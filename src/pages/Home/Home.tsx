@@ -7,6 +7,11 @@ function Home() {
   const [inputValue, setInputValue] = useState('');
   const [listProduct, setListProduct] = useState([]);
 
+  const filterByCategory = async (categoryID: string) => {
+    const list = await getProductsFromCategoryAndQuery(categoryID, '');
+    setListProduct(list.results);
+  };
+
   function handleChange(event:React.ChangeEvent<HTMLInputElement>) {
     setInputValue(event.target.value);
   }
@@ -44,7 +49,7 @@ function Home() {
           </li>
         ))) : <p>Nenhum produto foi encontrado</p>}
       </div>
-      <Sidebar />
+      <Sidebar filterByCategory={ filterByCategory } />
     </>
   );
 }
