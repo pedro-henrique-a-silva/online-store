@@ -4,10 +4,16 @@ export type CategoryResponse = {
 };
 
 export type CardType = {
-  id: string,
   title: string,
-  category: string,
   thumbnail: string,
   price: number,
-  description: string,
+  id : string,
+};
+
+export type CartItem = {
+  quantity: number
+} & CardType;
+
+export type CarrinhoProp = {
+  cartList: CartItem[]
 };
