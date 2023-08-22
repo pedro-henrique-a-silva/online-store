@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { CarrinhoProp } from '../../types';
 import CartList from '../../components/CartList/CartList';
 
@@ -22,7 +23,7 @@ function Carrinho(props: CarrinhoProp) {
             removeCartItem={ removeCartItem }
             getCartListFromStorage={ getCartListFromStorage }
         />}
-
+      <Link data-testid="checkout-products" to="/checkout">Finalizar Compra</Link>
     </div>
   );
 }
