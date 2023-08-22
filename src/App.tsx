@@ -5,6 +5,7 @@ import Home from './pages/Home/Home';
 import Carrinho from './pages/Carrinho/Carrinho';
 import Layout from './components/Layout/Layout';
 import CardDetails from './components/CardDetails/CardDetails';
+import Checkout from './pages/Checkout/Checkout';
 import { CartItem, CardType } from './types';
 
 function App() {
@@ -14,6 +15,10 @@ function App() {
     const newCartItem = cartList.filter((item) => item.title !== cartItem.title);
     localStorage.setItem('Carrinho', JSON.stringify(newCartItem));
     setCartList(newCartItem);
+  };
+  const clearCart = () => {
+    localStorage.setItem('Carrinho', JSON.stringify([]));
+    setCartList([]);
   };
 
   const getCartListFromStorage = (listItem: CartItem[]) => {
@@ -65,7 +70,7 @@ function App() {
             />
 }
         />
-        <Route path="/" />
+        <Route path="/checkout" element={ <Checkout clearCart={ clearCart } /> } />
       </Route>
       {/* <Route path="*" element={ <NotFound /> } /> */}
     </Routes>
