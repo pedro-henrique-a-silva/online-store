@@ -5,7 +5,7 @@ import Card from '../../components/Card/Card';
 import { CardType } from '../../types';
 
 type HomeProps = {
-  updateCart: (prodName: CardType) => void
+  updateCart: (prodName: CardType, op: string) => void
 };
 
 function Home(props: HomeProps) {

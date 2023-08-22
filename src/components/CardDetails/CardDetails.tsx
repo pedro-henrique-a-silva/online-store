@@ -5,7 +5,7 @@ import { CardType } from '../../types';
 import { getProductById } from '../../services/api';
 
 type CardDetailsProps = {
-  updateCart: (prodName: CardType) => void
+  updateCart: (prodName: CardType, op: string) => void
 };
 
 function CardDetails(props: CardDetailsProps) {
@@ -46,7 +46,7 @@ function CardDetails(props: CardDetailsProps) {
       <li data-testid="product-detail-price">{card?.price}</li>
       <button
         data-testid="product-detail-add-to-cart"
-        onClick={ () => updateCart(card) }
+        onClick={ () => updateCart(card, 'add') }
       >
         Adicionar ao carrinho
 
