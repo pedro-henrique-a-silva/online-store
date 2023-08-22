@@ -10,30 +10,53 @@ import { CartItem, CardType } from './types';
 function App() {
   const [cartList, setCartList] = useState<CartItem[]>([]);
 
-  const updateCart = (prodName: CardType) => {
+  const removeCartItem = (cartItem: CardType) => {
+    const newCartItem = cartList.filter((item) => item.title !== cartItem.title);
+    localStorage.setItem('Carrinho', JSON.stringify(newCartItem));
+    setCartList(newCartItem);
+  };
+
+  const getCartListFromStorage = (listItem: CartItem[]) => {
+    setCartList(listItem);
+  };
+
+  const updateCart = (prodName: CardType, op: string) => {
     const { title } = prodName;
+    let newCartList = [];
     const cardItemExist = cartList
       .find((item) => item.title === title) !== undefined;
 
     if (!cardItemExist) {
-      setCartList([...cartList, { ...prodName, quantity: 1 }]);
+      newCartList = [...cartList, { ...prodName, quantity: 1 }];
     } else {
-      const newCartList = cartList
+      newCartList = cartList
         .map((item) => {
           if (item.title === title) {
-            return { ...item, quantity: item.quantity + 1 };
+            return { ...item,
+              quantity: (op === 'add')
+                ? item.quantity + 1 : item.quantity - 1 };
           }
           return item;
         });
-      setCartList(newCartList);
     }
+
+    localStorage.setItem('Carrinho', JSON.stringify(newCartList));
+    setCartList(newCartList);
   };
 
   return (
     <Routes>
       <Route element={ <Layout /> }>
         <Route path="/" element={ <Home updateCart={ updateCart } /> } />
-        <Route path="/carrinho" element={ <Carrinho cartList={ cartList } /> } />
+        <Route
+          path="/carrinho"
+          element={ <Carrinho
+            cartList={ cartList }
+            updateCart={ updateCart }
+            getCartListFromStorage={ getCartListFromStorage }
+            removeCartItem={ removeCartItem }
+          /> }
+        />
         <Route
           path="/detalhesProduto/:id"
           element={

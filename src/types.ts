@@ -15,5 +15,8 @@ export type CartItem = {
 } & CardType;
 
 export type CarrinhoProp = {
+  updateCart: (prodName: CardType, op: string) => void,
+  removeCartItem: (cartItem: CardType) => void,
+  getCartListFromStorage: (listItem: CartItem[]) => void,
   cartList: CartItem[]
 };
