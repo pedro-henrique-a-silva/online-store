@@ -37,6 +37,7 @@ describe(`10 - Visualize a lista de produtos adicionados ao carrinho em sua pág
       '1',
     );
 
+    
     userEvent.click(screen.getAllByTestId('product-increase-quantity')[0]);
     userEvent.click(screen.getAllByTestId('product-increase-quantity')[0]);
     userEvent.click(screen.getAllByTestId('product-decrease-quantity')[0]);
@@ -51,9 +52,9 @@ describe(`10 - Visualize a lista de produtos adicionados ao carrinho em sua pág
       '3',
     );
 
-    userEvent.click(screen.getAllByTestId('product-decrease-quantity')[0]);
-    userEvent.click(screen.getAllByTestId('product-decrease-quantity')[0]);
-    expect(screen.getAllByTestId('shopping-cart-product-quantity')[0]).toHaveTextContent(
+    userEvent.click(screen.getAllByTestId('product-decrease-quantity')[1]);
+    userEvent.click(screen.getAllByTestId('product-decrease-quantity')[1]);
+    expect(screen.getAllByTestId('shopping-cart-product-quantity')[1]).toHaveTextContent(
       '1',
     );
   });

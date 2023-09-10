@@ -1,22 +1,48 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { DotOutline } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
-import { CartItem } from '../../types';
+import { ReduxState } from '../../types';
+import { clearCartAction } from '../../redux/actions';
 
-type CheckoutProps = {
-  clearCart: () => void;
-};
+import {
+  DivPrice,
+  CartItemResume,
+  DivTitle,
+  CartResumeList,
+  DivTotal,
+  DivInputs,
+  FormCheckout,
+  DivError,
+  ButtonFinishCheckout,
+  CheckoutWrapper,
+  WrapperForm,
+  DivPagamentos } from './styles';
 
-function Checkout(prop: CheckoutProps) {
-  const { clearCart } = prop;
-  const [cartList, setCartList] = useState<CartItem[]>([]);
-  const [invalidFields, setInvalidFields] = useState(false);
+// const INITIAL_STATE = {
+//   name: '',
+//   email: '',
+//   cpf: '',
+//   phone: '',
+//   cep: '',
+//   address: '',
+// };
+
+function Checkout() {
+  const cart = useSelector((state: ReduxState) => state.cart);
+  const dispatch = useDispatch();
+
+  // const [formValues, setFormValues] = useState(INITIAL_STATE);
   const [selectedPayment, setSelectedPayment] = useState('');
+  const [invalidFields, setInvalidFields] = useState(false);
+
   const navigate = useNavigate();
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const requiredFields = [
-      'fullname',
+      'name',
       'email',
       'cpf',
       'phone',
@@ -32,138 +58,153 @@ function Checkout(prop: CheckoutProps) {
     } else {
       setInvalidFields(false);
 
-      // Lógica para enviar o formulário ou fazer outras ações
-      // ...
-      clearCart();
+      dispatch(clearCartAction());
       navigate('/');
     }
   };
 
-  useEffect(() => {
-    const listStorage = localStorage.getItem('Carrinho');
-    if (listStorage) {
-      setCartList(JSON.parse(listStorage));
-    }
-  }, []);
-
   return (
-    <>
-      <ul>
-        {cartList.map((cartItem) => (
-          <li key={ cartItem.id }>
-            <img src={ cartItem.thumbnail } alt="" />
-            <span data-testid="shopping-cart-product-name">
-              {cartItem.title}
-            </span>
-            {' - '}
-            <span data-testid="shopping-cart-product-quantity">
-              Qtd:
-              {' '}
-              {cartItem.quantity}
-            </span>
-            <p>
-              R$
-              {' '}
-              {(cartItem.price * cartItem.quantity).toFixed(2)}
-            </p>
-          </li>
-        ))}
-      </ul>
-      <p>
-        Total: R$
-        {' '}
-        {cartList
-          .reduce(
-            (total, cartItem) => total + cartItem.price * cartItem.quantity,
-            0,
-          )
-          .toFixed(2)}
-      </p>
-      {invalidFields && <p data-testid="error-msg">Campos inválidos</p>}
-      <form onSubmit={ (event) => handleSubmit(event) }>
-        <label htmlFor="name">
-          <input
-            placeholder="Nome"
-            name="fullname"
-            data-testid="checkout-fullname"
-          />
-        </label>
-        <label htmlFor="email">
-          <input
-            placeholder="E-mail"
-            name="email"
-            data-testid="checkout-email"
-          />
-        </label>
-        <label htmlFor="cpf">
-          <input placeholder="CPF" name="cpf" data-testid="checkout-cpf" />
-        </label>
-        <label htmlFor="phone">
-          <input
-            placeholder="Telefone"
-            name="phone"
-            data-testid="checkout-phone"
-          />
-        </label>
-        <label htmlFor="cep">
-          <input placeholder="CEP" name="cep" data-testid="checkout-cep" />
-        </label>
-        <label htmlFor="address">
-          <input
-            placeholder="Endereço"
-            name="address"
-            data-testid="checkout-address"
-          />
-        </label>
-        <label htmlFor="boleto">
-          Boleto
-          <input
-            name="pagamento"
-            type="radio"
-            id="boleto"
-            data-testid="ticket-payment"
-            checked={ selectedPayment === 'boleto' }
-            onChange={ () => setSelectedPayment('boleto') }
-          />
-        </label>
-        <label htmlFor="mastercard">
-          MasterCard
-          <input
-            name="pagamento"
-            type="radio"
-            id="mastercard"
-            data-testid="master-payment"
-            checked={ selectedPayment === 'MasterCard' }
-            onChange={ () => setSelectedPayment('MasterCard') }
-          />
-        </label>
-        <label htmlFor="Visa">
-          Visa
-          <input
-            name="pagamento"
-            type="radio"
-            id="Visa"
-            data-testid="visa-payment"
-            checked={ selectedPayment === 'Visa' }
-            onChange={ () => setSelectedPayment('Visa') }
-          />
-        </label>
-        <label htmlFor="Elo">
-          Elo
-          <input
-            name="pagamento"
-            type="radio"
-            id="Elo"
-            data-testid="elo-payment"
-            checked={ selectedPayment === 'Elo' }
-            onChange={ () => setSelectedPayment('Elo') }
-          />
-        </label>
-        <button type="submit" data-testid="checkout-btn">
-          Finalizar Compra
-        </button>
-      </form>
-    </>
+    <CheckoutWrapper>
+      <div>
+        <CartResumeList>
+          {cart.map((cartItem) => {
+            return (
+              <CartItemResume key={ cartItem.id }>
+                <DivTitle>
+                  <DotOutline size={ 24 } weight="fill" />
+                  <h2>
+                    {cartItem.title}
+                  </h2>
+                </DivTitle>
+                <DivPrice>
+                  <span>{`${cartItem.quantity} x R$ ${cartItem.price}`}</span>
+                  <span>{`R$ ${(cartItem.price * cartItem.quantity).toFixed(2)}`}</span>
+                </DivPrice>
+              </CartItemResume>
+            );
+          })}
+        </CartResumeList>
+        <DivTotal>
+          <span>Total:</span>
+          <span>
+            {`R$ ${cart
+              .reduce((total, { price, quantity }) => {
+                return total + (quantity * price);
+              }, 0).toFixed(2)}`}
+          </span>
+        </DivTotal>
+      </div>
+      <WrapperForm>
+        {invalidFields && (
+          <DivError>
+            <p data-testid="error-msg">Campos inválidos</p>
+          </DivError>)}
+
+        <FormCheckout onSubmit={ handleSubmit }>
+          <DivInputs>
+            <label htmlFor="name">Nome completo:</label>
+            <input
+              name="name"
+              data-testid="checkout-fullname"
+              type="text"
+              autoComplete="off"
+            />
+          </DivInputs>
+          <DivInputs>
+            <label htmlFor="email">E-mail:</label>
+            <input
+              name="email"
+              data-testid="checkout-email"
+              type="text"
+              autoComplete="off"
+            />
+          </DivInputs>
+          <DivInputs>
+            <label htmlFor="cpf">Cpf:</label>
+            <input
+              name="cpf"
+              data-testid="checkout-cpf"
+              type="text"
+              autoComplete="off"
+            />
+          </DivInputs>
+          <DivInputs>
+            <label htmlFor="phone">Telefone:</label>
+            <input
+              name="phone"
+              data-testid="checkout-phone"
+              type="text"
+              autoComplete="off"
+            />
+          </DivInputs>
+          <DivInputs>
+            <label htmlFor="cep">Cep:</label>
+            <input
+              name="cep"
+              data-testid="checkout-cep"
+              type="text"
+              autoComplete="off"
+            />
+          </DivInputs>
+          <DivInputs>
+            <label htmlFor="address">Endereço:</label>
+            <input
+              name="address"
+              data-testid="checkout-address"
+              type="text"
+              autoComplete="off"
+            />
+          </DivInputs>
+          <h3>Forma de pagamento: </h3>
+
+          <DivPagamentos>
+            <label htmlFor="boleto">Boleto</label>
+            <input
+              id="boleto"
+              name="pagamento"
+              type="radio"
+              data-testid="ticket-payment"
+              checked={ selectedPayment === 'boleto' }
+              onChange={ () => setSelectedPayment('boleto') }
+            />
+            <label htmlFor="mastercard">MasterCard</label>
+            <input
+              id="mastercard"
+              name="pagamento"
+              type="radio"
+              data-testid="master-payment"
+              checked={ selectedPayment === 'mastercard' }
+              onChange={ () => setSelectedPayment('mastercard') }
+            />
+            <label htmlFor="Visa">Visa</label>
+            <input
+              id="Visa"
+              name="pagamento"
+              type="radio"
+              data-testid="visa-payment"
+              checked={ selectedPayment === 'visa' }
+              onChange={ () => setSelectedPayment('visa') }
+            />
+            <label htmlFor="Elo">Elo</label>
+            <input
+              id="elo"
+              name="pagamento"
+              type="radio"
+              data-testid="elo-payment"
+              checked={ selectedPayment === 'elo' }
+              onChange={ () => setSelectedPayment('elo') }
+            />
+          </DivPagamentos>
+          <ButtonFinishCheckout
+            data-testid="checkout-btn"
+          >
+            Finalizar compra
+
+          </ButtonFinishCheckout>
+        </FormCheckout>
+
+      </WrapperForm>
+    </CheckoutWrapper>
   );
 }
 

@@ -1,79 +1,29 @@
-import React, { useState } from 'react';
-import './App.css';
+import React from 'react';
+import { ThemeProvider } from 'styled-components';
 import { Routes, Route } from 'react-router-dom';
+import { GlobalStyles } from './styles/global-styles';
+import { light } from './styles/theme/light';
+
+import './App.css';
 import Home from './pages/Home/Home';
-import Carrinho from './pages/Carrinho/Carrinho';
-import Layout from './components/Layout/Layout';
-import CardDetails from './components/CardDetails/CardDetails';
+import Layout from './pages/Layout';
+import Cart from './pages/Cart/Cart';
+import Details from './pages/Details/Details';
 import Checkout from './pages/Checkout/Checkout';
-import { CartItem, CardType } from './types';
 
 function App() {
-  const [cartList, setCartList] = useState<CartItem[]>([]);
-
-  const removeCartItem = (cartItem: CardType) => {
-    const newCartItem = cartList.filter((item) => item.title !== cartItem.title);
-    localStorage.setItem('Carrinho', JSON.stringify(newCartItem));
-    setCartList(newCartItem);
-  };
-  const clearCart = () => {
-    localStorage.setItem('Carrinho', JSON.stringify([]));
-    setCartList([]);
-  };
-
-  const getCartListFromStorage = (listItem: CartItem[]) => {
-    setCartList(listItem);
-  };
-
-  const updateCart = (prodName: CardType, op: string) => {
-    const { title } = prodName;
-    let newCartList = [];
-    const cardItemExist = cartList
-      .find((item) => item.title === title) !== undefined;
-
-    if (!cardItemExist) {
-      newCartList = [...cartList, { ...prodName, quantity: 1 }];
-    } else {
-      newCartList = cartList
-        .map((item) => {
-          if (item.title === title) {
-            return { ...item,
-              quantity: (op === 'add')
-                ? item.quantity + 1 : item.quantity - 1 };
-          }
-          return item;
-        });
-    }
-
-    localStorage.setItem('Carrinho', JSON.stringify(newCartList));
-    setCartList(newCartList);
-  };
-
   return (
-    <Routes>
-      <Route element={ <Layout /> }>
-        <Route path="/" element={ <Home updateCart={ updateCart } /> } />
-        <Route
-          path="/carrinho"
-          element={ <Carrinho
-            cartList={ cartList }
-            updateCart={ updateCart }
-            getCartListFromStorage={ getCartListFromStorage }
-            removeCartItem={ removeCartItem }
-          /> }
-        />
-        <Route
-          path="/detalhesProduto/:id"
-          element={
-            <CardDetails
-              updateCart={ updateCart }
-            />
-}
-        />
-        <Route path="/checkout" element={ <Checkout clearCart={ clearCart } /> } />
-      </Route>
-      {/* <Route path="*" element={ <NotFound /> } /> */}
-    </Routes>
+    <ThemeProvider theme={ light }>
+      <GlobalStyles />
+      <Routes>
+        <Route path="/" element={ <Layout /> }>
+          <Route index element={ <Home /> } />
+          <Route path="/carrinho" element={ <Cart /> } />
+          <Route path="/details/:id" element={ <Details /> } />
+          <Route path="/checkout" element={ <Checkout /> } />
+        </Route>
+      </Routes>
+    </ThemeProvider>
   );
 }
 
