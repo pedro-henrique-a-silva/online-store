@@ -1,20 +1,42 @@
-# Online Store
+# Marketplace - Experiência de Compras Online
 
-## Descrição
+Nesse projeto fiz uma recriação de algumas funcionalidades de uma loja online utilizando a API do Mercado Livre. Os usuários podem explorar produtos por categoria ou palavra-chave, adicionar itens ao carrinho de compras e finalizar a compra em uma página de checkout completa. Aqui estão detalhes sobre as tecnologias utilizadas e como aproveitar ao máximo a aplicação:
 
-Neste projeto, recriei algumas das funcionalidades de uma loja online utilizando a API do Mercado Livre. Os usuários podem buscar produtos por categoria ou palavra-chave e ainda as funcionalidades de um carrinho de compras, além do a uma página de checkout completa.
+## Funcionalidades Principais
 
-Nesse projeto contei com a ajuda de dois colegas de turma da trybe.
+- **Busca por Produtos:** Explore uma ampla variedade de produtos buscando por categoria ou palavra-chave.
 
-## Conteúdo
+- **Carrinho de Compras:** Adicione produtos ao carrinho de compras e visualize facilmente os itens selecionados.
 
-- [Instruções de Instalação](#instruções-de-instalação)
-- [Como Usar](#como-usar)
+- **Página de Checkout Completa:** Finalize suas compras em uma página de checkout detalhada e intuitiva.
 
-## Instruções de Instalação
+## Tecnologias Utilizadas
 
-Basta rodar o comando `npm install` para instalar as dependencias necessárias.
+- **React com TypeScript:** Desenvolvi a aplicação utilizando React com TypeScript para garantir um código mais seguro e fácil de manter.
+
+- **Redux:** Implementei o Redux para gerenciamento de estado, facilitando a manipulação dos dados relacionados aos produtos e ao carrinho de compras.
+
+- **react-router-dom:** Utilizei o react-router-dom para criar uma navegação eficiente entre as diferentes páginas da aplicação.
+
+- **Hook useEffect:** Tirei proveito do useEffect para lidar com operações assíncronas, consumindo a API do Mercado Livre para obter informações sobre os produtos.
 
 ## Como Usar
 
-Basta rodar o comando `npm run dev` para ver a aplicação funcionando.
+1. **Clone o Repositório:**
+   ```bash
+     git clone git@github.com:pedro-henrique-a-silva/online-store.git
+
+2. **Instale as Dependências:** Obs: você precisa estar dentro da pasta do projeto
+   ```bash
+     npm install
+
+3. **Inicie a Aplicação:**
+   ```bash
+     npm start
+
+4. **Explore e Compre:**
+   - Busque por produtos, adicione itens ao carrinho e finalize suas compras na página de checkout.
+
+## Contribuições
+
+Contribuições são bem-vindas! Se você tiver sugestões para melhorar a aplicação ou encontrar problemas, sinta-se à vontade para compartilhar suas ideias através de issues ou pull requests.
